@@ -177,3 +177,8 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 BookmarksManager.Firefox/x*
+.idea/.idea.BookmarksManager/.idea/encodings.xml
+.idea/.idea.BookmarksManager/.idea/indexLayout.xml
+.idea/.idea.BookmarksManager/.idea/vcs.xml
+.idea/.idea.BookmarksManager/.idea/projectSettingsUpdater.xml
+.idea/.idea.BookmarksManager/.idea/workspace.xml
