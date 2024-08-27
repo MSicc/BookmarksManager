@@ -33,17 +33,17 @@ namespace BookmarksManager
         /// <summary>
         /// All links from all folders in flat structure
         /// </summary>
-        public IEnumerable<BookmarkLink> AllLinks => this.GetAllItems<BookmarkLink>();
+        public IEnumerable<BookmarkLink> AllLinks => GetAllItems<BookmarkLink>();
 
         /// <summary>
         /// All items (links, folders and custom IBookmarkItem objects) in flat structure
         /// </summary>
-        public IEnumerable<IBookmarkItem> AllItems => this.GetAllItems<IBookmarkItem>();
+        public IEnumerable<IBookmarkItem> AllItems => GetAllItems<IBookmarkItem>();
 
         /// <summary>
         /// All folders in flat structure
         /// </summary>
-        public IEnumerable<IBookmarkFolder> AllFolders => this.GetAllItems<IBookmarkFolder>();
+        public IEnumerable<IBookmarkFolder> AllFolders => GetAllItems<IBookmarkFolder>();
 
         public BookmarkFolder()
         {
@@ -52,7 +52,7 @@ namespace BookmarksManager
 
         public BookmarkFolder(string title) : this()
         {
-            Title = title;
+            this.Title = title;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace BookmarksManager
         /// <returns>Flattened list of <typeparamref name="T"/> items</returns>
         public virtual IEnumerable<T> GetAllItems<T>() where T : class,IBookmarkItem
         {
-            return this.GetAllItems<T>(this);
+            return GetAllItems<T>(this);
         }
 
 
@@ -87,7 +87,7 @@ namespace BookmarksManager
 
         public override string ToString()
         {
-            return $">>> {Title} <<<";
+            return $">>> {this.Title} <<<";
         }
     }
 }

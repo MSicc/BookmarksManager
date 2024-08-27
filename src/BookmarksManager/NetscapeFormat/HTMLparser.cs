@@ -538,7 +538,7 @@ namespace Majestic12
 
         public void SetChunkHashMode(bool bHashMode)
         {
-            CurrentChunk.bHashMode = bHashMode;
+            this.CurrentChunk.bHashMode = bHashMode;
         }
 
         ~HTMLparser()
@@ -923,7 +923,7 @@ namespace Majestic12
                 InitEntities();
 
             HtmlBytes = null;
-            CurrentChunk = new HTMLchunk(true);
+            this.CurrentChunk = new HTMLchunk(true);
             CurPos = 0;
             DataLength = 0;
         }
@@ -983,7 +983,7 @@ namespace Majestic12
 
             // we reach this function immediately after tag's byte (<) was
             // detected, so we need to save it in order to keep correct HTML copy
-            CurrentChunk.Append((byte) '<'); // (byte)'<'
+            this.CurrentChunk.Append((byte) '<'); // (byte)'<'
 
             /*
 			oChunk.bBuffer[0]=60;
@@ -1023,7 +1023,7 @@ namespace Majestic12
                     //cChar=NextChar();
 
                     if (bWhiteSpace && (KeepRawHTML || !bGotTag || (bGotTag && bComments)))
-                        CurrentChunk.Append((byte) ' ');
+                        this.CurrentChunk.Append((byte) ' ');
                 }
                 else
                 {
@@ -1039,7 +1039,7 @@ namespace Majestic12
                         if (cChar != 13 && (bKeepWhiteSpace || bComments || bQuotes))
                         {
                             if (KeepRawHTML || !bGotTag || (bGotTag && bComments))
-                                CurrentChunk.Append(cChar);
+                                this.CurrentChunk.Append(cChar);
 
                             //sText.Append(cChar);
                             // NOTE: this is manual inlining from actual object
@@ -1080,16 +1080,16 @@ namespace Majestic12
                     {
                         // we have to skip now to next byte, since 
                         // some converted chars might well be control chars like >
-                        CurrentChunk.bEntities = true;
+                        this.CurrentChunk.bEntities = true;
 
                         if (cChar == '<')
-                            CurrentChunk.bLtEntity = true;
+                            this.CurrentChunk.bLtEntity = true;
 
                         // unless is space we will ignore it
                         // note that this won't work if &nbsp; is defined as it should
                         // byte int value of 160, rather than 32.
                         //if(cChar!=' ')
-                        CurrentChunk.Append(cChar);
+                        this.CurrentChunk.Append(cChar);
 
                         //continue;
                     }
@@ -1102,7 +1102,7 @@ namespace Majestic12
                 // check if we've got tag now: either whitespace before current symbol or the next one is end of string
                 if (!bGotTag)
                 {
-                    CurrentChunk.Append(cChar);
+                    this.CurrentChunk.Append(cChar);
 
                     if ((Text.iBufPos >= 3 && (Text.bBuffer[0] == '!' && Text.bBuffer[1] == '-' && Text.bBuffer[2] == '-')))
                         bComments = true;
@@ -1116,13 +1116,13 @@ namespace Majestic12
 
                         if (bComments)
                         {
-                            CurrentChunk.Tag = "!--";
-                            CurrentChunk.Type = HTMLchunkType.Comment;
-                            CurrentChunk.bComments = true;
+                            this.CurrentChunk.Tag = "!--";
+                            this.CurrentChunk.Type = HTMLchunkType.Comment;
+                            this.CurrentChunk.bComments = true;
                         }
                         else
                         {
-                            CurrentChunk.Tag = Text.ToLowerString();
+                            this.CurrentChunk.Tag = Text.ToLowerString();
                         }
 
                         bGotTag = true;
@@ -1134,10 +1134,10 @@ namespace Majestic12
                 else
                 {
                     if (KeepRawHTML || bComments)
-                        CurrentChunk.Append(cChar);
+                        this.CurrentChunk.Append(cChar);
 
                     // ought to be parameter
-                    if (Text.iBufPos != 0 && !CurrentChunk.bComments)
+                    if (Text.iBufPos != 0 && !this.CurrentChunk.bComments)
                     {
                         if ((bWhiteSpace && !bQuotes) || (cPeek == 0 || cPeek == '>'))
                         {
@@ -1153,11 +1153,11 @@ namespace Majestic12
 
                             if (iEqualIdx <= 0)
                             {
-                                CurrentChunk.AddParam(sParam.ToLower(), "");
+                                this.CurrentChunk.AddParam(sParam.ToLower(), "");
                             }
                             else
                             {
-                                CurrentChunk.AddParam(sParam.Substring(0, iEqualIdx).ToLower(), sParam.Substring(iEqualIdx + 1, sParam.Length - iEqualIdx - 1));
+                                this.CurrentChunk.AddParam(sParam.Substring(0, iEqualIdx).ToLower(), sParam.Substring(iEqualIdx + 1, sParam.Length - iEqualIdx - 1));
                                 //bQuotesAllowed=true;
                             }
 
@@ -1185,20 +1185,20 @@ namespace Majestic12
                             if (LookBack(2) == '-' && LookBack(3) == '-')
                             {
                                 bComments = false;
-                                return CurrentChunk;
+                                return this.CurrentChunk;
                             }
                         }
                         else
                         {
                             if (!bQuotes)
                             {
-                                if (CurrentChunk.bComments)
-                                    CurrentChunk.Type = HTMLchunkType.Comment;
+                                if (this.CurrentChunk.bComments)
+                                    this.CurrentChunk.Type = HTMLchunkType.Comment;
                                 else
                                 {
-                                    CurrentChunk.Type = CurrentChunk.bClosure ? HTMLchunkType.CloseTag : HTMLchunkType.OpenTag;
+                                    this.CurrentChunk.Type = this.CurrentChunk.bClosure ? HTMLchunkType.CloseTag : HTMLchunkType.OpenTag;
                                 }
-                                return CurrentChunk;
+                                return this.CurrentChunk;
                             }
                         }
 
@@ -1234,7 +1234,7 @@ namespace Majestic12
                     case 47:
 
                         if (!bQuotes && !bGotTag)
-                            CurrentChunk.bClosure = true;
+                            this.CurrentChunk.bClosure = true;
                         else
                             goto AddSymbol;
 
@@ -1272,14 +1272,14 @@ namespace Majestic12
 
             GetOut:
 
-            if (CurrentChunk.bComments)
-                CurrentChunk.Type = HTMLchunkType.Comment;
+            if (this.CurrentChunk.bComments)
+                this.CurrentChunk.Type = HTMLchunkType.Comment;
             else
             {
-                CurrentChunk.Type = CurrentChunk.bClosure ? HTMLchunkType.CloseTag : HTMLchunkType.OpenTag;
+                this.CurrentChunk.Type = this.CurrentChunk.bClosure ? HTMLchunkType.CloseTag : HTMLchunkType.OpenTag;
             }
 
-            return CurrentChunk;
+            return this.CurrentChunk;
         }
 
         /// <summary>
@@ -1335,10 +1335,10 @@ namespace Majestic12
         public HTMLchunk PeakNext()
         {
             var currPos = CurPos;
-            var currChunk = CurrentChunk;
-            CurrentChunk = new HTMLchunk(true);
+            var currChunk = this.CurrentChunk;
+            this.CurrentChunk = new HTMLchunk(true);
             var result = ParseNext();
-            CurrentChunk = currChunk;
+            this.CurrentChunk = currChunk;
             CurPos = currPos;
             return result;
         }
@@ -1348,7 +1348,7 @@ namespace Majestic12
             if (chunk == null)
                 return;
             CurPos = chunk.ContentPosition;
-            CurrentChunk = chunk;
+            this.CurrentChunk = chunk;
         }
 
         /// <summary>
@@ -1367,9 +1367,9 @@ namespace Majestic12
         /// <returns>HTMLchunk or null if end of data reached</returns>
         public HTMLchunk ParseNext(bool bKeepWhiteSpace)
         {
-            CurrentChunk.Clear();
-            CurrentChunk.Type = HTMLchunkType.Text;
-            CurrentChunk.ContentPosition = CurPos;
+            this.CurrentChunk.Clear();
+            this.CurrentChunk.Type = HTMLchunkType.Text;
+            this.CurrentChunk.ContentPosition = CurPos;
 
             var bWhiteSpace = false;
             byte cChar = 0x00;
@@ -1416,30 +1416,30 @@ namespace Majestic12
                         // we may have found text bit before getting to the tag
                         // in which case we need to put back tag byte and return
                         // found text first, the tag will be parsed next time
-                        if (CurrentChunk.iBufPos > 0 || bWhiteSpace)
+                        if (this.CurrentChunk.iBufPos > 0 || bWhiteSpace)
                         {
                             // we will add 1 white space chars to compensate for 
                             // loss of space before tag since this space often serves as a delimiter between words
                             if (bWhiteSpace)
-                                CurrentChunk.Append(0x20);
+                                this.CurrentChunk.Append(0x20);
 
                             //PutChar();
                             CurPos--;
 
                             // finalise chunk if text mode is not false
                             if (TextMode)
-                                CurrentChunk.Finalise();
+                                this.CurrentChunk.Finalise();
 
-                            return CurrentChunk;
+                            return this.CurrentChunk;
                         }
 
                         if (!KeepRawHTML)
                             return ParseTag(bKeepWhiteSpace);
-                        CurrentChunk = ParseTag(bKeepWhiteSpace);
+                        this.CurrentChunk = ParseTag(bKeepWhiteSpace);
 
-                        CurrentChunk.Finalise();
+                        this.CurrentChunk.Finalise();
 
-                        return CurrentChunk;
+                        return this.CurrentChunk;
 
                         /*
 						 * case 179:
@@ -1461,7 +1461,7 @@ namespace Majestic12
 							}
 							*/
 
-                            CurrentChunk.Append(cChar);
+                            this.CurrentChunk.Append(cChar);
                         }
                         break;
 
@@ -1486,10 +1486,10 @@ namespace Majestic12
                                     cChar = (byte) '&';
                                 else
                                 {
-                                    CurrentChunk.bEntities = true;
+                                    this.CurrentChunk.bEntities = true;
 
                                     if (cChar == '<')
-                                        CurrentChunk.bLtEntity = true;
+                                        this.CurrentChunk.bLtEntity = true;
                                 }
                             }
 
@@ -1497,24 +1497,24 @@ namespace Majestic12
                             {
                                 if (bWhiteSpace)
                                 {
-                                    if (CurrentChunk.iBufPos > 0)
+                                    if (this.CurrentChunk.iBufPos > 0)
                                     {
                                         //PutChar();
                                         CurPos--;
 
-                                        CurrentChunk.Finalise();
-                                        return CurrentChunk;
+                                        this.CurrentChunk.Finalise();
+                                        return this.CurrentChunk;
                                     }
                                 }
                                 else
                                 {
                                     if (char.IsPunctuation((char) cChar))
                                     {
-                                        if (CurrentChunk.iBufPos > 0)
+                                        if (this.CurrentChunk.iBufPos > 0)
                                         {
                                             //PutChar();
-                                            CurrentChunk.Finalise();
-                                            return CurrentChunk;
+                                            this.CurrentChunk.Finalise();
+                                            return this.CurrentChunk;
                                         }
                                         break;
                                     }
@@ -1523,10 +1523,10 @@ namespace Majestic12
                             else
                             {
                                 if (bWhiteSpace && TextMode)
-                                    CurrentChunk.Append((byte) ' ');
+                                    this.CurrentChunk.Append((byte) ' ');
                             }
 
-                            CurrentChunk.Append(cChar);
+                            this.CurrentChunk.Append(cChar);
                         }
 
                         break;
@@ -1534,15 +1534,15 @@ namespace Majestic12
                 ;
             }
 
-            if (CurrentChunk.iBufPos == 0)
+            if (this.CurrentChunk.iBufPos == 0)
                 return null;
 
             // it will be null if we have not found any data
 
             if (TextMode)
-                CurrentChunk.Finalise();
+                this.CurrentChunk.Finalise();
 
-            return CurrentChunk;
+            return this.CurrentChunk;
         }
 
 

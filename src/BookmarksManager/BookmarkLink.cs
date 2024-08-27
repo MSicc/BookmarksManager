@@ -39,21 +39,21 @@ namespace BookmarksManager
 
         public BookmarkLink(string url = null, string title = null)
         {
-            Url = url;
-            Title = title;
+            this.Url = url;
+            this.Title = title;
         }
 
         public BookmarkLink(Uri url, string title = null)
         {
             if (url == null)
                 throw new ArgumentNullException(nameof(url));
-            Url = url.AbsoluteUri;
-            Title = title;
+            this.Url = url.AbsoluteUri;
+            this.Title = title;
         }
 
         public override string ToString()
         {
-            return $"{Title} ({Url})";
+            return $"{this.Title} ({this.Url})";
         }
     }
 }

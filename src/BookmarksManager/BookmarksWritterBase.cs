@@ -11,8 +11,8 @@ namespace BookmarksManager
 
         protected BookmarksWriterBase(T bookmarksContainer)
         {
-            OutputEncoding = Encoding.UTF8;
-            BookmarksContainer = bookmarksContainer;
+            this.OutputEncoding = Encoding.UTF8;
+            this.BookmarksContainer = bookmarksContainer;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace BookmarksManager
         /// <param name="outputStream">Writable output stream; It will be automatically closed, you must override this method to prevent this</param>
         public virtual void Write(Stream outputStream)
         {
-            using (var writer = new StreamWriter(outputStream, OutputEncoding))
+            using (var writer = new StreamWriter(outputStream, this.OutputEncoding))
             {
                 Write(writer);
             }

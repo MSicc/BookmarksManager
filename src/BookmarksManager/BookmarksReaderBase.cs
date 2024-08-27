@@ -9,7 +9,7 @@ namespace BookmarksManager
 
         protected BookmarksReaderBase()
         {
-            InputEncoding = Encoding.UTF8;
+            this.InputEncoding = Encoding.UTF8;
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace BookmarksManager
         /// <returns>Bookmarks container</returns>
         public virtual T Read(Stream inputStream)
         {
-            using (var reader = new StreamReader(inputStream, InputEncoding))
+            using (var reader = new StreamReader(inputStream, this.InputEncoding))
             {
                 return Read(reader.ReadToEnd());
             }

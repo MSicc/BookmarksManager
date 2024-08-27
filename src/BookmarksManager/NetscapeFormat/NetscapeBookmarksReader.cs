@@ -54,8 +54,8 @@ namespace BookmarksManager
 
         public NetscapeBookmarksReader()
         {
-            HeaderLength = 512;
-            AutoDetectEncoding = true;
+            this.HeaderLength = 512;
+            this.AutoDetectEncoding = true;
         }
 
         /// <summary>
@@ -84,10 +84,10 @@ namespace BookmarksManager
             {
                 inputStream.CopyTo(ms);
                 var content = ms.ToArray();
-                if (AutoDetectEncoding)
+                if (this.AutoDetectEncoding)
                 {
                     InputEncoding = content.GetEncoding();
-                    var headerLengthBytes = HeaderLength*InputEncoding.GetMaxByteCount(1);
+                    var headerLengthBytes = this.HeaderLength*InputEncoding.GetMaxByteCount(1);
                     var toRead = headerLengthBytes > 0 && headerLengthBytes < content.Length ? headerLengthBytes : content.Length;
                     var header = InputEncoding.GetString(content, 0, toRead);
                     InputEncoding = GetEncoding(header);
