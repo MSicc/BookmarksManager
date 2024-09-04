@@ -19,7 +19,7 @@ namespace BookmarksManager
 
         public static DateTime? FromUnixTimeStamp(string unixTimeStamp)
         {
-            if (!string.IsNullOrEmpty(unixTimeStamp) && long.TryParse(unixTimeStamp, out long unixTime))
+            if (!string.IsNullOrEmpty(unixTimeStamp) && long.TryParse(unixTimeStamp, out var unixTime))
             {
                 return FromUnixTimeStamp(unixTime);
             }
@@ -30,7 +30,7 @@ namespace BookmarksManager
             number = Math.Abs(number);
             if (number == 0)
                 return number;
-            int numberOfDigits = (int)Math.Floor(Math.Log10(number) + 1);
+            var numberOfDigits = (int)Math.Floor(Math.Log10(number) + 1);
             if (numberOfDigits >= n)
                 return (long)Math.Truncate((number / Math.Pow(10, numberOfDigits - n)));
             else
